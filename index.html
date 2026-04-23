@@ -8,8 +8,15 @@
 
   <style>
     body { transition: background-color 0.2s; }
-    canvas { border: 2px solid #0f0; margin: 5px; }
-  </style>
+canvas {
+  display: block;
+  width: calc(100vw - 10px);
+  height: calc(100vh - 10px);
+  margin: 5px; /* Added missing semicolon here */
+  box-sizing: border-box;
+}
+
+</style>
 </head>
 <body class="bg-gray-900 flex flex-col items-center justify-center h-screen" oncontextmenu="return false;">
 
@@ -29,10 +36,10 @@
   CLICK ME 
 </button>
 <div id="main">
-    <canvas id="c1" width="4096" height="4096">
+    <canvas id="c1" width="8192" height="8192">
     </canvas>
     </div>
-<script>
+<script>  
   setTimeout(() => {
 
     const videoElement = document.getElementById('my-video');
@@ -118,7 +125,7 @@ function startFractal(canvasId, containerId) {
     var t1 = new Date().getTime();
     var mx = 0, my = 0, mx1 = 0, my1 = 0, lasttimen = 0;
     var ml = 0, mr = 0, mm = 0;
-    var len = 1.6;
+    var len = 0.5;
     var ang1 = 2.8;
     var ang2 = 0.4;
     var cenx = 0.0, ceny = 0.0, cenz = 0.0;
@@ -275,13 +282,6 @@ function startFractal(canvasId, containerId) {
 
     // --- Events ---
     window.addEventListener('resize', handleResize);
-    document.addEventListener('mousedown', function(e) { if(e.button==0) ml=1; if(e.button==2) mr=1; mx=e.clientX; my=e.clientY; });
-    document.addEventListener('mouseup', function(e) { ml=0; mr=0; });
-    document.addEventListener('mousemove', function(e) {
-        if (ml) { ang1 += (e.clientX - mx) * 0.002; ang2 += (e.clientY - my) * 0.002; mm=1; }
-        mx = e.clientX; my = e.clientY;
-    });
-    document.addEventListener('mousewheel', function(e) { e.preventDefault(); len *= Math.exp(-0.001 * e.wheelDelta); }, {passive:false});
 
     // --- Start ---
     setupShaders();
@@ -354,7 +354,20 @@ function startFractal(canvasId, containerId) {
       }
     });
   }, 2000);
+
+</script>
+<script>
+window.addEventListener('beforeunload', (e) => {
+  // 1. Cancel the event (standard way)
+  e.preventDefault();
+  
+  // 2. Set returnValue (required by Chrome/legacy browsers)
+  // The string content is ignored by modern browsers
+  e.returnValue = ''; 
+});
+
 </script>
 
 </body>
 </html>
+
